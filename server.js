@@ -13,14 +13,22 @@ const server  = http.createServer((request , respond) => {
     switch(request.url){
         case '/':
             $desPath += 'homePage.html';
+            respond.statusCode=200;
             break;
         
         case '/about':
             $desPath += 'about.html';
+            respond.statusCode=200;
             break;
         
+        case '/about-us':
+            respond.setHeader('Location' , '/about')
+            respond.statusCode=301;
+            break;
+
         default :
             $desPath += 'pageNotFound.html';
+            respond.statusCode=404;
         
     }
 
@@ -42,3 +50,4 @@ const server  = http.createServer((request , respond) => {
 server.listen(3000 , 'localhost' , () => {
     console.log("Start talking on port 3000...");
 });
+
