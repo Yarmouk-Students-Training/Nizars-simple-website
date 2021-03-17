@@ -1,10 +1,11 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 
 
 app.listen(3000);
 
-
+app.use(express.static('Public_Files'));
 app.set('view engine', 'ejs');
 
 
