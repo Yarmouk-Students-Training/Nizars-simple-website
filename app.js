@@ -1,23 +1,34 @@
-const express= require('express');
+const express = require('express');
 const app = express();
+
 
 app.listen(3000);
 
-app.get('/' , (request , respond)=>{
 
-    respond.sendFile("./HTMLfiles/homePage.html" , {root : __dirname});
-})
+app.set('view engine', 'ejs');
 
-app.get('/about' , (request , respond)=>{
 
-    respond.sendFile("./HTMLfiles/about.html" , {root : __dirname});
-})
+app.get('/', (req, res) => {
+  const blogs = [
+    {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+  ];
+  res.render('index', { title: 'Home', blogs });
+});
 
-app.get('/about-us' , (request , respond)=>{
+app.get('/about', (req, res) => {
+  res.render('about', { title: 'About' });
+});
 
-    respond.redirect('/about');
-})
+app.get('/blogs/create', (req, res) => {
+  res.render('create', { title: 'Create a new blog' });
+});
 
-app.use((request , respond) =>{
-    respond.status(404).sendFile("./HTMLfiles/pageNotFound.html" , {root : __dirname});
-})
+app.get('/about-us', (req, res) => {
+  res.redirect('/about');
+}); 
+
+app.use((req, res) => {
+  res.status(404).render('404', { title: '404' });
+});
