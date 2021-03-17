@@ -41,7 +41,17 @@ app.get('/all-blogs', (req, res) => {
     Blog.findById('60523b3caca5fe16c41e9910')
     .then((result)=>res.send(result))
     .catch((err)=>console.log(err));
-    });  
+    });
+    
+    app.get('/blogs', (req, res) => {
+      Blog.find().sort({ createdAt: -1 })
+        .then(result => {
+          res.render('index', { blogs: result, title: 'All blogs' });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
 
 app.get('/', (req, res) => {
   const blogs = [
