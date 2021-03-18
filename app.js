@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const blogRoutes = require('./routes/blogsRoutes');
+const usersRoutes = require('./routes/usersRoutes');
 
 const app = express();
 
@@ -14,7 +15,7 @@ mongoose.connect(dpurl ,{
 })
   .then((res) => {
     
-    console.log("Done");
+    console.log("Connected");
     app.listen(3000)
   })
   .catch((err)=>
@@ -49,7 +50,9 @@ app.get('/about-us', (req, res) => {
   res.redirect('/about');
 });
 
-app.use(blogRoutes);
+app.use('/blogs',blogRoutes);
+
+app.use('/users',usersRoutes);
 
 app.use((req, res) => {
 
