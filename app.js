@@ -4,17 +4,18 @@ const mongoose = require('mongoose');
 const Blog=require('./modules/blogs');
 
 const app = express();
-const dpurl = "mongodb+srv://nizar1:test1234@nizarcluster.nc8uf.mongodb.net/node?retryWrites=true&w=majority";
+const dpurl = "mongodb+srv://nizar2:test1234@nizarcluster.nc8uf.mongodb.net/node?retryWrites=true&w=majority";
 
 mongoose.connect(dpurl ,{useNewUrlParser:true,useUnifiedTopology:true})
-  .then((res) => app.listen(3000))
+  .then((res) => {console.log("Done");app.listen(3000)})
   .catch((err)=>console.log("Connection error" , err));
 
-var db = mongoose.connection;
+
  
 
 
 app.use(express.static('Public_Files'));
+app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 app.get('/add-blog', (req, res) => {
@@ -37,11 +38,9 @@ app.get('/all-blogs', (req, res) => {
   .catch((err)=>console.log(err));
   });
 
-  app.get('/single-blog', (req, res) => {  
-    Blog.findById('60523b3caca5fe16c41e9910')
-    .then((result)=>res.send(result))
-    .catch((err)=>console.log(err));
-    });
+  app.get('/blogs/create', (req, res) => {
+    res.render('create', { title: 'Create a new blog' });
+  });
     
     app.get('/blogs', (req, res) => {
       Blog.find().sort({ createdAt: -1 })
@@ -54,25 +53,54 @@ app.get('/all-blogs', (req, res) => {
     });
 
 app.get('/', (req, res) => {
-  const blogs = [
-    {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-  ];
-  res.render('index', { title: 'Home', blogs });
+  res.redirect('/blogs')
 });
+
 
 app.get('/about', (req, res) => {
   res.render('about', { title: 'About' });
 });
 
-app.get('/blogs/create', (req, res) => {
-  res.render('create', { title: 'Create a new blog' });
+app.post('/blogs', (req, res) => {
+  const blog = new Blog(req.body);
+
+  blog.save()
+    .then(result => {
+      res.redirect('/blogs');
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 app.get('/about-us', (req, res) => {
   res.redirect('/about');
 }); 
+
+app.get('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+
+  Blog.findById(id)
+  .then(result => {
+    res.render('details', { blog: result, title: 'detailed' });
+  })
+  .catch(err => {
+    console.log(err);
+  });
+});
+
+app.delete('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+  
+  Blog.findByIdAndDelete(id)
+    .then(result => {
+      res.json({ redirect: '/blogs' });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 
 app.use((req, res) => {
   res.status(404).render('404', { title: '404' });
