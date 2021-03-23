@@ -14,7 +14,7 @@ app.get('/' , (res ,req)=>{
 });
 
 
-app.get('/user/create' , (res ,req)=>{
+app.get('/user/new' , (res ,req)=>{
     
 });
 app.post('/user/create', (res ,req)=>{
@@ -29,7 +29,7 @@ app.get('/user/login', (res ,req)=>{
 });
 
 
-app.get('/post/create', (res ,req)=>{
+app.get('/post/new', (res ,req)=>{
     
 });
 
@@ -49,16 +49,16 @@ app.delete('/post/:postid', (res ,req)=>{
     
 });
 
-app.get('/post/:userid', (res ,req)=>{
+app.get('/post/user/:userid', (res ,req)=>{
     
 });
 
 
-app.get('/post', (res ,req)=>{
+app.get('/posts', (res ,req)=>{
     
 });
 
-app.get('/comment/create', (res ,req)=>{
+app.get('/comment/new', (res ,req)=>{
     
 });
 
@@ -66,7 +66,7 @@ app.post('/comment/create', (res ,req)=>{
     
 });
 
-app.get('/comment/:commentid', (res ,req)=>{
+app.get('/comments/:post_id', (res ,req)=>{
     
 });
 
@@ -78,7 +78,7 @@ app.put('/comment/:commentid', (res ,req)=>{
     
 });
 
-app.get('/reaction/create', (res ,req)=>{
+app.get('/reaction/new', (res ,req)=>{
     
 });
 
@@ -86,7 +86,12 @@ app.post('/reaction/create', (res ,req)=>{
     
 });
 
-app.get('/reaction/:reactionid', (res ,req)=>{
+
+app.get('/reactions/r_id/:reaction_id', (res ,req)=>{
+    
+});
+
+app.get('/reactions/:post_id', (res ,req)=>{
     
 });
 
@@ -96,4 +101,8 @@ app.delete('/reaction/:reactionid', (res ,req)=>{
 
 app.put('/reaction/:reactionid', (res ,req)=>{
     
+});
+
+app.get('/friends/:user_id', (res, req)=>{
+
 });
