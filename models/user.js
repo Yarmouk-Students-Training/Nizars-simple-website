@@ -26,21 +26,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
 
-    fname: {
+    first_name: {
       allowNull: false,
       type: DataTypes.STRING
     },
     
-    lname: {
+    last_name: {
       allowNull: false,
       type: DataTypes.STRING
     },
     
     email: {
+      unique:true,
       allowNull: false,
       type: DataTypes.STRING,
+
       validate:{
-        isEmail:true;
+        isEmail:true
       }
     },
     
@@ -51,14 +53,21 @@ module.exports = (sequelize, DataTypes) => {
     
     gender: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.ENUM('Male' , 'Female')
     },
 
     country: {
       allowNull: false,
       type: DataTypes.STRING
-    }}
-    , 
+    },
+    DOB:{
+      allowNull:false,
+      type:DataTypes.DATE
+    }
+  
+  }
+    ,
+     
     {
     sequelize,
     tableName:'user',

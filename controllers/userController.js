@@ -1,27 +1,30 @@
-const User=require('../modules/user.js');
+const comment=require('../modules/comment');
 
-const user_register_post = (req, res) => {
-
-    const user = User(req.body);
-    console.log(req.body);
-    user.save()
-        .then((result) => {
-
-            res.redirect('/blogs');
-        })
-        .catch((err) => console.log(err));
-        
+const get_registeration_page = (req, res) => {
+    
 }
+  
+const post_register_user = (req, res) => {
 
-const user_register_get = (req, res) => {
-
-     res.render('register' , {
-         title : "Regiter"
-     });
 }
+  
+const get_profile_page = (req, res) => {
 
+}
+  
+const get_login_page = (req, res) => {
+
+}
+  
+const post_login_user = (req, res) => {
+
+}
+  
 module.exports = {
-
-    user_register_post,
-    user_register_get
-}
+      
+  get_registeration_page, 
+  post_register_user, 
+  get_profile_page, 
+  get_login_page, 
+  post_login_user
+} 

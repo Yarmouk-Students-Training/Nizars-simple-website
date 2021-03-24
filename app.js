@@ -1,63 +1,33 @@
-const express = require('express');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const blogRoutes = require('./routes/blogsRoutes');
-const usersRoutes = require('./routes/usersRoutes');
+const {sequelize} = require('./models');
 
+const postRoutes = require('./routes/postRoutes');
+const usersRoutes = require('./routes/userRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const reactionRoutes = require('./routes/reactionRoutes');
+const relationshipRoutes = require('./routes/relationshipRoutes');
+
+const express=require('express');
 const app = express();
 
-const dpurl = "mongodb+srv://nizar2:test1234@nizarcluster.nc8uf.mongodb.net/node?retryWrites=true&w=majority";
+async function main(){
+    await sequelize.sync({alter : true});
+}
 
-mongoose.connect(dpurl ,{
+//main()
+app.listen(3000);
 
-  useNewUrlParser:true,
-  useUnifiedTopology:true
-})
-  .then((res) => {
-    
-    console.log("Connected");
-    app.listen(3000)
-  })
-  .catch((err)=>
-  console.log("Connection error" , err)
-  );
-
-app.use(express.static('Public_Files'));
-
-app.use(express.urlencoded({
-  
-  extended: true 
-})
-);
-
-app.set('view engine', 'ejs');
-
-app.get('/', (req, res) => {
-
-  res.redirect('/blogs')
+app.get('/' , (res ,req)=>{
+    return res.json();
 });
 
-app.get('/about', (req, res) => {
+app.use(usersRoutes);
 
-  res.render('about', {
-     
-    title: 'About' 
-  });
-});
+app.use(postRoutes);
 
-app.get('/about-us', (req, res) => {
+app.use(commentRoutes);
 
-  res.redirect('/about');
-});
+app.use(reactionRoutes);
 
-app.use('/blogs',blogRoutes);
+app.use(relationshipRoutes);
 
-app.use('/users',usersRoutes);
 
-app.use((req, res) => {
-
-  res.status(404).render('404', {
-
-    title: '404' 
-  });
-});
