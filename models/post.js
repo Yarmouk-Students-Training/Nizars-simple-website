@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({User ,Comment , Reaction }) {
       
-      this.belongsTo(User,{foreignKey:'user_id'});
+      this.belongsTo(User,{foreignKey:'username'});
 
       
       this.hasMany(Comment,{foreignKey:'post_id'});
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
       type: DataTypes.STRING
+    },
+    username:{
+      type: DataTypes.STRING,
+      allowNull: false
     },
     content: {
       

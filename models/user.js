@@ -10,16 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate({Post:Post,Comment:Comment,Reaction:Reaction , Relationship : Relationship}) {
-      this.hasMany(Post,{foreignKey:'user_id'});
-      this.hasMany(Comment,{foreignKey:'user_id'});
-      this.hasMany(Reaction,{foreignKey:'user_id'});
+      this.hasMany(Post,{foreignKey:'username'});
+      this.hasMany(Comment,{foreignKey:'username'});
+      this.hasMany(Reaction,{foreignKey:'username'});
 
       this.belongsToMany(this,{through : Relationship ,as: 'actionMaker' ,foreignKey:"actionReceiver"})
+      this.belongsToMany(this,{through : Relationship ,as: 'actionReceiver' ,foreignKey:"actionMaker"})
       
     }
   };
   User.init({
-    user_id: {
+    username: {
       allowNull: false,
       
       primaryKey: true,
@@ -50,7 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    
     gender: {
       allowNull: false,
       type: DataTypes.ENUM('Male' , 'Female')

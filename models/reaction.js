@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({User,Post:Post}) {
 
-      this.belongsTo(User,{foreignKey:'user_id'});
+      this.belongsTo(User,{foreignKey:'username'});
       this.belongsTo(Post,{foreignKey:'post_id'});
       
     }
@@ -24,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     content: {
       
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    username:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    post_id: {
       allowNull: false,
       type: DataTypes.STRING
     },

@@ -11,4 +11,6 @@ router.get('/reaction/:reactionid',  controller.get_specific_reaction);
 
 router.delete('/reaction/:reactionid', controller.delete_specific_reaction);
 
-router.put('/reaction/:reactionid', controller.edit_specific_reaction);s
+router.put('/reaction/:reactionid', controller.edit_specific_reaction);
+
+module.exports=router;

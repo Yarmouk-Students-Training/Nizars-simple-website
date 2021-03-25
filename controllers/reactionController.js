@@ -1,4 +1,4 @@
-const comment=require('../modules/comment');
+const Reaction=require('../models/reaction');
 
 const get_create_reaction = (req, res) => {
     

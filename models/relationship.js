@@ -18,6 +18,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false,
       type:DataTypes.INTEGER
     },
+    actionMaker:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    actionReceiver:{
+      type: DataTypes.STRING,
+      allowNull: false
+    }, // i love you 
+    //me too
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE

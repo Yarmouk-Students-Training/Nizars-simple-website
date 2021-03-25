@@ -1,26 +1,31 @@
 const {sequelize} = require('./models');
+const bodyParser = require('body-parser');
 
-const postRoutes = require('./routes/postRoutes');
-const usersRoutes = require('./routes/userRoutes');
-const commentRoutes = require('./routes/commentRoutes');
-const reactionRoutes = require('./routes/reactionRoutes');
-const relationshipRoutes = require('./routes/relationshipRoutes');
+const postRoutes = require('./routes/postRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
+const commentRoutes = require('./routes/commentRoutes.js');
+const reactionRoutes = require('./routes/reactionRoutes.js');
+const relationshipRoutes = require('./routes/relationshipRoutes.js');
 
 const express=require('express');
 const app = express();
 
-async function main(){
-    await sequelize.sync({alter : true});
-}
+//const sync=require('./sync.js');
 
-//main()
-app.listen(3000);
+app.listen(3000 , async ()=>{
+    await sequelize.authenticate();
+
+});
+
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/' , (res ,req)=>{
     return res.json();
 });
 
-app.use(usersRoutes);
+app.use(userRoutes);
 
 app.use(postRoutes);
 

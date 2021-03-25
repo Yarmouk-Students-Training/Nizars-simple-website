@@ -1,4 +1,4 @@
-const comment=require('../modules/comment');
+const Comment=require('../models/comment');
 
 const get_create_comment_page = (req, res) => {
     
