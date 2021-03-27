@@ -1,4 +1,4 @@
-const {Post , Comment}=require('../models/index');
+const {Post , Comment , Reaction}=require('../models/index');
 
 const get_create_post_page = async(req, res) => {
     
@@ -6,11 +6,11 @@ const get_create_post_page = async(req, res) => {
   
 const post_create_post = async(req, res) => {
   
-  const {username , post_id , content} = req.body;
+  const {username ,content} = req.body;
 
   try{
 
-    await Post.create({username , post_id , content});
+    await Post.create({username, content});
 
     return res.json("Post created successfully");
   }
@@ -23,10 +23,11 @@ const post_create_post = async(req, res) => {
   
 const get_specific_post = async(req, res) => {
 
-  const post_id = req.params.post_id;
+  const post_uuid = req.params.post_uuid;
 
   try{
-    const post = await Post.findByPk(post_id);
+
+    const post = await Post.findOne({where:{post_uuid}});
     
     return res.json(post);
   }
@@ -40,13 +41,12 @@ const get_specific_post = async(req, res) => {
 }
   
 const edit_specific_post = async(req, res) => {
-  const post_id = req.params.post_id;
+  const post_uuid = req.params.post_uuid;
 
   const {content} = req.body;
 
   try{
-    const post = await Post.findByPk(post_id);
-    
+    const post = await Post.findOne({where:{post_uuid}}); 
     post.content = content;
 
     return res.json(post);
@@ -63,12 +63,13 @@ const edit_specific_post = async(req, res) => {
   
 const delete_specific_post = async(req, res) => {
 
-  const post_id = req.params.post_id;
+  const post_uuid = req.params.post_uuid;
 
   try{
-     await Post.destroy({
-       where :{post_id}
-     });
+
+    const post = await Post.findOne({where:{post_uuid}}); 
+
+     await post.destroy();
 
     return res.json("Post has been deleted");
   }
@@ -106,15 +107,41 @@ const get_specific_user_allPosts = async(req, res) => {
 
 const get_allComments_specific_post = async(req, res) => {
 
-  const post_id = req.params.post_id;
+  const post_uuid = req.params.post_uuid;
 
   try{
+
+    const post = await Post.findOne({where:{post_uuid}}); 
+    const post_id = post.post_id;
 
     const allComments = await Comment.findAll({
       where :{post_id}
     });
 
     return res.json(allComments);
+  }
+
+  catch(err){
+
+    console.log(err);
+    return res.status(500).json({err : "Something went wrong"});
+  }
+}
+
+const get_allReactions_specific_post = async(req, res) => {
+
+  const post_uuid = req.params.post_uuid;
+
+  try{
+
+    const post = await Post.findOne({where:{post_uuid}}); 
+    const post_id = post.post_id;
+
+    const allReactions = await Reaction.findAll({
+      where :{post_id}
+    });
+
+    return res.json(allReactions);
   }
 
   catch(err){
@@ -147,5 +174,6 @@ module.exports = {
   delete_specific_post,
   get_specific_user_allPosts,
   get_allComments_specific_post,
+  get_allReactions_specific_post,
   get_All_website_posts
 } 

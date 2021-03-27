@@ -12,7 +12,7 @@ const get_registeration_page = async(req, res) => {
   let { username , first_name , last_name, email, password_hash , gender ,country ,DOB} = req.body;
   DOB = new Date(DOB);
   
-console.log( DOB);
+//console.log( DOB);
     try {
 
       await User.create({ username , first_name , last_name, email, password_hash , gender ,country ,DOB });

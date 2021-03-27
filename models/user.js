@@ -14,11 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(Comment,{foreignKey:'username'});
       this.hasMany(Reaction,{foreignKey:'username'});
 
-      this.belongsToMany(this,{through : Relationship ,as: 'actionMaker' ,foreignKey:"actionReceiver"})
-      this.belongsToMany(this,{through : Relationship ,as: 'actionReceiver' ,foreignKey:"actionMaker"})
+      this.belongsToMany(this,{through : Relationship ,as: 'action_maker' ,foreignKey:"action_receiver"})
+      this.belongsToMany(this,{through : Relationship ,as: 'action_receiver' ,foreignKey:"action_maker"})
       
     }
-  };
+
+    toJSON(){
+      return {...this.get(), password_hash:undefined}
+    }
+  }
   User.init({
     username: {
       allowNull: false,

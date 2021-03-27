@@ -15,12 +15,28 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(Post,{foreignKey:'post_id'});
       
     }
-  };
+
+    toJSON(){
+      return {...this.get(), comment_id:undefined , post_id:undefined}
+    }
+  }
   Comment.init({
     comment_id: {
       primaryKey: true,
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER,
+      autoIncrement: true
+    },
+
+    comment_uuid:{
+      unique:true,
+      type : DataTypes.UUID,
+      allowNull: false,
+      defaultValue:DataTypes.UUIDV4
+    },
+    post_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
     content: {
       
@@ -30,10 +46,6 @@ module.exports = (sequelize, DataTypes) => {
     username:{
       type: DataTypes.STRING,
       allowNull: false
-    },
-    post_id: {
-      allowNull: false,
-      type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,

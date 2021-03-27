@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false,
       type:DataTypes.INTEGER
     },
-    actionMaker:{
+    action_maker:{
       type: DataTypes.STRING,
       allowNull: false
     },
-    actionReceiver:{
+    action_receiver:{
       type: DataTypes.STRING,
       allowNull: false
     }, // i love you 

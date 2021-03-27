@@ -18,12 +18,24 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(Reaction,{foreignKey:'post_id'});
 
     }
-  };
+
+    toJSON(){
+      return {...this.get(), post_id:undefined}
+    }
+  }
   Post.init({
     post_id: {
       primaryKey: true,
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER,
+      autoIncrement: true
+    },
+
+    post_uuid:{
+      unique:true,
+      type : DataTypes.UUID,
+      allowNull: false,
+      defaultValue:DataTypes.UUIDV4
     },
     username:{
       type: DataTypes.STRING,
