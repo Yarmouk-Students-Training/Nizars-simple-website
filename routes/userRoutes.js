@@ -13,7 +13,11 @@ router.post('/user/login',controller.post_login_user);
 
 router.get('/users',controller.get_all_users);
 
-router.get('/user',controller.get_cuurentUser_profile_page);
+router.get('/user',controller.verify,controller.get_cuurentUser_profile_page);
+
+router.get('/user/posts/:username', controller.get_specific_user_allPosts);
+
+router.get('/user/posts',controller.verify, controller.get_current_user_allPosts);
 
 router.get('/user/:username', controller.get_profile_page);
 

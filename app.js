@@ -1,6 +1,7 @@
 const {sequelize} = require('./models');
 const bodyParser = require('body-parser');
 
+
 const postRoutes = require('./routes/postRoutes.js');
 const userRoutes = require('./routes/userRoutes.js');
 const commentRoutes = require('./routes/commentRoutes.js');

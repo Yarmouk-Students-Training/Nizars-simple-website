@@ -84,26 +84,6 @@ const delete_specific_post = async(req, res) => {
 
 }
 
-const get_specific_user_allPosts = async(req, res) => {
-  
-  const username = req.params.username;
-
-  try{
-
-    const allPosts = await Post.findAll({
-      where :{username}
-    });
-    
-    return res.json(allPosts);
-  }
-
-  catch(err){
-
-    console.log(err);
-    return res.status(500).json({err : "Something went wrong"});
-  }
-
-}
 
 const get_allComments_specific_post = async(req, res) => {
 
@@ -172,7 +152,6 @@ module.exports = {
   get_specific_post, 
   edit_specific_post, 
   delete_specific_post,
-  get_specific_user_allPosts,
   get_allComments_specific_post,
   get_allReactions_specific_post,
   get_All_website_posts

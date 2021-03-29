@@ -42,7 +42,7 @@ const get_friends_specific_user = async(req, res) => {
   
 const get_friends_current_user = async(req, res) => {
 
-  const {username} = req.body;
+  const username = req.user;
 
 
     try{
@@ -84,7 +84,7 @@ const get_friends_current_user = async(req, res) => {
   
 const get_pendingRequests_current_user = async(req, res) => {
 
-  const {username} = req.body;
+  const username = req.user;
   //console.log(username);
 
     try{
@@ -119,7 +119,7 @@ const get_pendingRequests_current_user = async(req, res) => {
 
 const get_blockedList_current_user = async(req, res) => {
 
-  const {username} = req.body;
+  const username = req.user;
 
     try{
 
@@ -155,7 +155,7 @@ const post_create_realationship = async(req, res) => {
  
   const action_receiver = req.params.action_receiver;
   const status = req.params.status;
-  const {action_maker} = req.body;
+  const action_maker = req.user;
 
 //console.log(status);
 

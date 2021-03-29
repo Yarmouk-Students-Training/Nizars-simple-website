@@ -1,12 +1,33 @@
+const { Op } = require("sequelize");
+const { User  , Post}=require('../models/index');
+const jwt = require('jsonwebtoken');
 
-const { User }=require('../models/index');
+const accessTokenSecret = "SDASdasdas;dl0sd302dj023dj02303ed230320&$";
 
 const get_registeration_page = async(req, res) => {
 
   return res.json("Nothing");
     
 }
+
+const verify = async(req, res, next) => {
+  const authHeader = req.headers.authorization;
   
+  if (authHeader) {
+      const token = authHeader;//authHeader.split(' ')[1];  
+      jwt.verify(token, accessTokenSecret, (err, user) => {
+        
+          if (err) {
+              return res.sendStatus(403);
+          }
+          req.user = user;
+          next();
+      });
+  } else {
+      return res.sendStatus(401);
+  }
+};
+
  const post_register_user = async (req, res) => {
 
   let { username , first_name , last_name, email, password_hash , gender ,country ,DOB} = req.body;
@@ -58,19 +79,21 @@ const get_login_page = async(req, res) => {
   
 const post_login_user = async(req, res) => {
 
-//after login success:
-try{
-  
-  
+  const { username, password_hash } = req.body;
 
-  return res.json("Successfully login");
-}
+    
+    const user = await User.findOne({where : {[Op.and]:[{username }, {password_hash}]}});
 
-catch(err){
+    if (user) {
+        
+        const accessToken = jwt.sign(username, accessTokenSecret);
 
-  console.log(err);
-  return res.status(500).json({err :"Something went wrong"});
-}
+        res.json({
+            accessToken
+        });
+    } else {
+        res.send('Username or password incorrect');
+    }
 }
 
 const get_all_users = async (req , res) =>{
@@ -92,7 +115,7 @@ const get_all_users = async (req , res) =>{
 
 const get_cuurentUser_profile_page = async (req , res) =>{
 
-  const {username} = req.body;
+  const username = req.user;
 
   try{
 
@@ -113,6 +136,48 @@ const get_cuurentUser_profile_page = async (req , res) =>{
     return res.status(500).json(err);
 }
 }
+
+const get_specific_user_allPosts = async(req, res) => {
+  
+  const username = req.params.username;
+
+  try{
+
+    const allPosts = await Post.findAll({
+      where :{username}
+    });
+    
+    return res.json(allPosts);
+  }
+
+  catch(err){
+
+    console.log(err);
+    return res.status(500).json({err : "Something went wrong"});
+  }
+
+}
+
+const get_current_user_allPosts = async(req, res) => {
+  
+  const username = req.user;
+
+  try{
+
+    const allPosts = await Post.findAll({
+      where :{username}
+    });
+    
+    return res.json(allPosts);
+  }
+
+  catch(err){
+
+    console.log(err);
+    return res.status(500).json({err : "Something went wrong"});
+  }
+
+}
   
 module.exports = {
       
@@ -122,5 +187,8 @@ module.exports = {
   get_login_page, 
   post_login_user,
   get_all_users,
-  get_cuurentUser_profile_page
+  get_cuurentUser_profile_page,
+  get_specific_user_allPosts,
+  get_current_user_allPosts,
+  verify
 } 
