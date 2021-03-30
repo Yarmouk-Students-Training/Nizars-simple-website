@@ -1,6 +1,7 @@
 const {sequelize} = require('./models');
+const {reIssue} = require('./tokens');
 const bodyParser = require('body-parser');
-
+require('dotenv').config()
 
 const postRoutes = require('./routes/postRoutes.js');
 const userRoutes = require('./routes/userRoutes.js');
@@ -25,6 +26,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/' , (res ,req)=>{
     return res.json();
 });
+
+app.get('/refresh' ,reIssue);
 
 app.use(userRoutes);
 

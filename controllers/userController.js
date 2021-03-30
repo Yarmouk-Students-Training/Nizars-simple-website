@@ -2,7 +2,6 @@ const { Op } = require("sequelize");
 const { User  , Post}=require('../models/index');
 const jwt = require('jsonwebtoken');
 
-const accessTokenSecret = "SDASdasdas;dl0sd302dj023dj02303ed230320&$";
 
 const get_registeration_page = async(req, res) => {
 
@@ -10,23 +9,10 @@ const get_registeration_page = async(req, res) => {
     
 }
 
-const verify = async(req, res, next) => {
-  const authHeader = req.headers.authorization;
-  
-  if (authHeader) {
-      const token = authHeader;//authHeader.split(' ')[1];  
-      jwt.verify(token, accessTokenSecret, (err, user) => {
-        
-          if (err) {
-              return res.sendStatus(403);
-          }
-          req.user = user;
-          next();
-      });
-  } else {
-      return res.sendStatus(401);
-  }
-};
+const refresh = (req , res)=>{
+
+}
+
 
  const post_register_user = async (req, res) => {
 
@@ -86,10 +72,12 @@ const post_login_user = async(req, res) => {
 
     if (user) {
         
-        const accessToken = jwt.sign(username, accessTokenSecret);
+        const accessToken = jwt.sign(username, process.env.access_token_secret ,{expiresIn: 900});
+        const refreshToken = jwt.sign(username, process.env.refresh_token_secret ,{expiresIn : '7d'});
 
         res.json({
-            accessToken
+            accessToken,
+            refreshToken
         });
     } else {
         res.send('Username or password incorrect');
@@ -100,7 +88,7 @@ const get_all_users = async (req , res) =>{
 
   try{
   
-    console.log("DSD")
+   
     const allUsers = await User.findAll();
   
     return res.json(allUsers);
@@ -160,7 +148,7 @@ const get_specific_user_allPosts = async(req, res) => {
 
 const get_current_user_allPosts = async(req, res) => {
   
-  const username = req.user;
+  const username = req.username;
 
   try{
 
@@ -178,7 +166,29 @@ const get_current_user_allPosts = async(req, res) => {
   }
 
 }
+
+const post_logout_user = async(req, res , refreshToken) => {
+
+  await jwt.verify(token, refreshTokenSecret, async (err, username) => {
+          
+    if (err) {
+        return res.status(403).json({err:"invalid refresh token"});
+     }
+    
+
+try{
+  const userToken = await User_Token.findOne({where : {username}});
+  userToken.destroy();
+
+  return res.json("Logout successfully");
+
+}catch(err){
   
+  return  res.status(500).json("Some thing went wrong");
+}
+});
+
+} 
 module.exports = {
       
   get_registeration_page, 
@@ -190,5 +200,5 @@ module.exports = {
   get_cuurentUser_profile_page,
   get_specific_user_allPosts,
   get_current_user_allPosts,
-  verify
+  post_logout_user
 } 
