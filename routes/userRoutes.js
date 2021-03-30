@@ -16,7 +16,7 @@ router.get('/user/logout',verifyAccessToken,controller.post_logout_user);
 
 router.post('/user/login',controller.post_login_user);
 
-router.get('/user/logout',verifyAccessToken,controller.post_logout_user);
+router.get('/user/logout',controller.post_logout_user);
 
 router.get('/users',controller.get_all_users);
 
